@@ -13,7 +13,7 @@ const PlayerSchema = new mongoose.Schema({
   tag: { type: String, required: true },
   teamId: { type: Number, required: true },
   isWin: { type: Boolean, required: true },
-  position: { type: String, required: true },
+  position: { type: String, required: true, enum: ["TOP", "JGL", "MID", "ADC", "SPT", "UNK"] },
   championName: { type: String, required: true },
   spell1Id: { type: Number, required: true },
   spell2Id: { type: Number, required: true },

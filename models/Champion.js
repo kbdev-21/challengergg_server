@@ -4,7 +4,7 @@ const ChampionSchema = new mongoose.Schema(
   {
     code: {type: String, required: true, unique: true},
     name: { type: String, required: true },
-    position: {type: String, required: true, enum: ["TOP", "JGL", "MID", "ADC", "SPT"]},
+    position: {type: String, required: true, enum: ["TOP", "JGL", "MID", "ADC", "SPT", "UNK"]},
     picks: { type: Number, required: true },
     wins: { type: Number, required: true },
     pickRate: { type: Number, required: true },

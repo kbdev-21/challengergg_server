@@ -1,8 +1,10 @@
+import { Performance } from "../models/AccountStats.js";
 import { Match, Player, Rune } from "../models/Match.js";
 import {
   fetchMatchesHistoryIdsByPuuid,
   fetchMatchInfoByMatchId,
 } from "../repositories/api/leagueApi.js";
+import { accountStatsRepo } from "../repositories/database/accountStatsRepo.js";
 import { matchesRepo } from "../repositories/database/matchesRepo.js";
 import { calculateKbScore } from "../utils/algorithm.js";
 import { gameModeMap, positionMap } from "../utils/maps.js";
@@ -143,6 +145,8 @@ async function getMatchesByPuuidOnDb(puuid, start, count, queueFilter) {
       matches.push(match);
     }
 
+    await addPerformancesToAccount(puuid, matches);
+
     return matches;
   } catch (error) {
     throw new Error(`Error fetching matches: ${error.message}`);
@@ -164,6 +168,29 @@ async function getMatchFromDbOrApi(matchId) {
     console.error(`Failed to fetch match ${matchId}:`, error.message);
     return null;
   }
+}
+
+async function addPerformancesToAccount(puuid, matches) {
+  const performances = [];
+
+  matches.forEach((match) => {
+    const player = match.players.find((player) => player.puuid === puuid);
+
+    if (match.gameMode === "RANKED_SOLO" || match.gameMode === "RANKED_FLEX") {
+      const performance = new Performance({
+        matchId: match.matchId,
+        isWin: player.isWin,
+        championName: player.championName,
+        position: player.position,
+        kda: player.kda,
+        gameVersion: match.gameVersion,
+        gameMode: match.gameMode,
+      });
+
+      performances.push(performance);
+    }
+  });
+  await accountStatsRepo.addPerformances(puuid, performances);
 }
 
 export const matchesService = {

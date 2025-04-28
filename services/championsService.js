@@ -5,6 +5,7 @@ import {
   calculateChampionPowerScore,
   calculateChampionTier,
 } from "../utils/algorithm.js";
+import { matchesRepo } from "../repositories/database/matchesRepo.js";
 
 async function getChampionsByName(name) {
   try {
@@ -25,10 +26,17 @@ async function getAllChampions() {
 
 async function calChampsStatsAndSaveToDb() {
   try {
-    const matches = await Match.find({}, "matchId players gameMode");
+    const matches = await matchesRepo.getAllMatches();
     const championsPicksCount = {};
     const championsWinsCount = {};
     let gamesCount = 0;
+    // const champsEachPosition = {
+    //   TOP: new Set(),
+    //   JGL: new Set(),
+    //   MID: new Set(),
+    //   ADC: new Set(),
+    //   SPT: new Set(),
+    // };
 
     matches.forEach((match) => {
       if (
@@ -53,11 +61,17 @@ async function calChampsStatsAndSaveToDb() {
           if (player.isWin) {
             championsWinsCount[champ] += 1;
           }
+
+          // Track unique champions per position
+          //champsEachPosition[player.position].add(player.championName);
         });
       }
     });
 
-    //const champsStats = [];
+    //test
+    // for (const [pos, champsSet] of Object.entries(champsEachPosition)) {
+    //   console.log(`${pos}: ${champsSet.size} unique champions`);
+    // }
 
     // **Use for...of instead of forEach to properly await the database save**
     for (const [champ, picks] of Object.entries(championsPicksCount)) {
@@ -85,17 +99,7 @@ async function calChampsStatsAndSaveToDb() {
       });
 
       await championsRepo.saveToDb(champStats);
-
-      //champsStats.push(champStats);
     }
-
-    // champsStats.sort((a, b) => b.pickRate - a.pickRate);
-
-    // champsStats.forEach((champStats) => {
-    //   console.log(
-    //     `${champStats.name}: Win rate: ${champStats.winRate}%, Pick rate: ${champStats.pickRate}%`
-    //   );
-    // });
   } catch (error) {
     console.error("Error retrieving matches:", error);
   }

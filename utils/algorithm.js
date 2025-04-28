@@ -49,7 +49,7 @@ export function calculateChampionPowerScore(pickRate, winRate) {
   if(winScore > 10) winScore = 10;
   if(winScore < 0) winScore = 0;
 
-  const powerScore = (winScore/10)*60 + (pickScore/10)*40;
+  const powerScore = (winScore/10)*65 + (pickScore/10)*35;
   return Math.round(powerScore);
 }
 

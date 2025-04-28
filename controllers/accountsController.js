@@ -1,4 +1,5 @@
 import { accountsService } from "../services/accountsService.js";
+import { accountStatsService } from "../services/accountStatsService.js";
 
 async function getAccount(req, res) {
   try {
@@ -36,7 +37,23 @@ async function searchAccounts(req, res) {
   }
 }
 
+async function getAccountStats(req, res) {
+  try {
+    const {puuid} = req.params;
+    if (!puuid) {
+      return res.status(400).json({ error: "Invalid puuid" });
+    }
+
+    const accountStats = await accountStatsService.getAccountChampStatsByPuuid(puuid);
+
+    res.status(200).json({stats: accountStats});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 export const accountsController = {
   getAccount,
   searchAccounts,
+  getAccountStats
 };

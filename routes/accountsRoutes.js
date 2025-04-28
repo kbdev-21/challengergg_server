@@ -5,5 +5,6 @@ const router = Router();
 
 router.get("/api/accounts/by-riotid/:gamename/:tagline",accountsController.getAccount);
 router.get("/api/accounts/search", accountsController.searchAccounts);
+router.get("/api/accounts/stats/by-puuid/:puuid", accountsController.getAccountStats);
 
 export default router;
