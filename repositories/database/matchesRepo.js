@@ -44,7 +44,7 @@ async function findByMatchId(matchId) {
 
 async function getAllMatches() {
   try {
-    const matches = await Match.find({}, "matchId players gameMode");
+    const matches = await Match.find({}).lean();
     return matches;
   } catch (error) {
     throw error;
