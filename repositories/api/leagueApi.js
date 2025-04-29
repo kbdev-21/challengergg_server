@@ -3,6 +3,20 @@ import { gameModeToIdMap } from "../../utils/maps.js";
 
 const apiKey = process.env.RIOT_API_KEY;
 
+export async function fetchRiotIdByPuuid(puuid) {
+  try {
+    const baseUrl =
+      "https://asia.api.riotgames.com/riot/account/v1/accounts/by-puuid/";
+    const res = await axios.get(
+      `${baseUrl}${puuid}?api_key=${apiKey}`
+    );
+    //console.log('Riot API called');
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function fetchPuuidByRiotId(gameName, tagLine) {
   try {
     const baseUrl =

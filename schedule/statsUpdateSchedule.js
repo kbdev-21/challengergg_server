@@ -3,8 +3,8 @@ import { championsService } from "../services/championsService.js";
 import { fetchRankedPlayersByRankAndQueueId } from "../repositories/api/leagueApi.js";
 import { matchesService } from "../services/matchesService.js";
 
-//fetch matches stats: every 5 minutes
-cron.schedule("*/5 * * * *", async () => {
+//fetch matches stats: every 10 minutes
+cron.schedule("*/10 * * * *", async () => {
   console.log("Start fetching matches...");
   try {
     const intToRankMap = { 0: "c", 1: "gm", 2: "m" };
@@ -42,8 +42,8 @@ cron.schedule("*/5 * * * *", async () => {
   }
 });
 
-//calculate matches stats: every 30 minutes
-cron.schedule("*/30 * * * *", async () => {
+//calculate matches stats: every 60 minutes
+cron.schedule("*/60 * * * *", async () => {
   console.log("Start calculating champions' stats...");
   try {
     await championsService.calChampsStatsAndSaveToDb();
