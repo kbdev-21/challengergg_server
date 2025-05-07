@@ -14,6 +14,10 @@ async function saveToDb(champion) {
         winRate: champion.winRate,
         powerScore: champion.powerScore,
         tier: champion.tier,
+        mostItems: champion.mostItems,
+        mostSpellCombo: champion.mostSpellCombo,
+        mostRune: champion.mostRune,
+        mostBoots: champion.mostBoots
       },
       { upsert: true, new: true, runValidators: true } // runValidators ensures data is valid
     );
