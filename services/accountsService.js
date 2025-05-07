@@ -7,6 +7,7 @@ import {
 import { getRankPowerByRank } from "../utils/leagueUtils.js";
 import { accountsRepo } from "../repositories/database/accountsRepo.js";
 import { Account, Rank } from "../models/Account.js";
+import { normalizeVietnamese } from "../utils/stringUtils.js";
 
 const queueMap = {
   RANKED_SOLO_5x5: "RANKED_SOLO",
@@ -43,6 +44,7 @@ async function getAccountByPuuid(puuid) {
       profileIconId: infoData.profileIconId,
       summonerLevel: infoData.summonerLevel,
       rank: accountRanks, // Include rank
+      normalizedName: normalizeVietnamese(puuidData.gameName)
     });
 
     await accountsRepo.saveToDb(account);
@@ -83,6 +85,7 @@ async function getAccountByRiotId(name, tag) {
       profileIconId: infoData.profileIconId,
       summonerLevel: infoData.summonerLevel,
       rank: accountRanks, // Include rank
+      normalizedName: normalizeVietnamese(puuidData.gameName)
     });
 
     await accountsRepo.saveToDb(account);

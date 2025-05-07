@@ -17,6 +17,7 @@ const AccountSchema = new mongoose.Schema(
     profileIconId: { type: Number, required: true },
     summonerLevel: { type: Number, required: true },
     rank: { type: [RankSchema], required: true },
+    normalizedName: {type: String, required: true, index: true}
   },
   { timestamps: true }
 );
